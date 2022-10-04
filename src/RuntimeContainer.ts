@@ -26,7 +26,7 @@ export class RuntimeContainer {
     return this;
   }
 
-  #make<T>(token: string, classHint?: Function): T {
+  #make<T>(token: string, container: RuntimeContainer, classHint?: Function): T {
     const binding = this.#bindings.get(token);
     if (binding) {
       return this.make(binding);
@@ -42,12 +42,12 @@ export class RuntimeContainer {
 
       if (!provider) {
         if (this.#parent) {
-          return this.#parent.#make(token, classHint);
+          return this.#parent.#make(token, container, classHint);
         }
         throw new Error(`No provider for ${token.split("@").shift()!}`);
       }
 
-      return provider(this, classHint ?? this.#hints.get(token));
+      return provider(container, classHint ?? this.#hints.get(token));
     } finally {
       this.#makeStack.pop();
     }
@@ -80,7 +80,7 @@ export class RuntimeContainer {
       }
     }
 
-    const result = this.#make<T>(token, classHint);
+    const result = this.#make<T>(token, this, classHint);
 
     if (pool != null && pool > 0) {
       const instances = this.#pool.get(token)!;
