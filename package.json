@@ -1,0 +1,22 @@
+{
+  "name": "autocontainer",
+  "version": "0.1.0",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^18.8.1",
+    "typescript": "^4.8.4"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./transformer": {
+      "import": "./dist/transformer.js",
+      "types": "./dist/transformer.d.ts"
+    }
+  },
+  "scripts": {
+    "prepublish": "tsc"
+  }
+}
